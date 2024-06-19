@@ -3,7 +3,7 @@
 Dust Coin is a unique memetoken that brings humor and community engagement to the blockchain. Inspired by the phrase "seeing dust," a comic way of saying getting embarrassed or rejected, Dust Coin allows users to share their funny and embarrassing stories, known as Dust Coins, and earn tokens by interacting with the content. Our mission is to turn personal setbacks into collective joy while creating a vibrant, engaged community.
 
 ## Table of Contents
-
+-[Pitch Deck](link)
 - [Introduction](#introduction)
 - [Background](#background)
 - [Vision & Mission](#vision--mission)
