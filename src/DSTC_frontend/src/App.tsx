@@ -1,67 +1,47 @@
-import { Route, Routes, BrowserRouter } from "react-router-dom";
-import { useState } from "react";
-import Home from "./Pages/Home";
-import DSTCComponent from "./Pages/About";
-import PublishStoryComponent from "./Pages/Share"
-import BlogCardsComponent from "./Pages/Dusts";
+import { useEffect } from "react";
+import Header from "./components/Header";
+import { routes } from "./constants";
 
-import ArticleComponent from "./Pages/Dust";
-import WalletPopup from "./components/Wallet";
-//import PurchasePopup from "./components/PurchaseDust";
-import WhitePaper from "./Pages/Whitepaper";
-import Roadmap from "./Pages/Roadmap";
-import HowItWorks from "./Pages/Technical";
-export const App = () => {
+import AboutSection from "./sections/AboutSection";
+import CollectionSection from "./sections/CollectionSection";
+import FAQSection from "./sections/FAQSection";
+import FeaturesSection from "./sections/FeaturesSection";
+import FooterSection from "./sections/FooterSection";
+import MainSection from "./sections/MainSection";
+import Popularity from "./sections/Popularity";
+import PromoSection from "./sections/PromoSection";
+import Animate from "./components/Animate";
+import { theme, APP_BODY_ID } from "./utils";
 
-const [principal, setPrincipal]=useState("")
- const [showPopup, setShowPopup] = useState(false);
-  const [_, setshowPurchasePopUp] = useState(false);
+const Components = [
+  { El: Header, id: routes.home },
+  { El: MainSection, id: routes.home },
 
+  { El: AboutSection, id: routes.about },
+  { El: FeaturesSection, id: routes.features },
 
-   const handleConnectWallet = () => {
-    setShowPopup(true);
-  };
+  { El: FooterSection, id: routes.footer },
+];
 
-  const handleClosePopup = () => {
-    setShowPopup(false);
-  };
-
-  const handlePurchasePopup = () => {
-    setshowPurchasePopUp(true);
-  };
-
-  // const closePurchasePopup = () => {
-  //   setshowPurchasePopUp(false);
-  // };
+function App() {
+  useEffect(() => {
+    const loader = document.querySelector(".loader");
+    if (loader) loader.remove();
+    theme.initiate();
+  }, []);
 
   return (
-    <BrowserRouter>
-
-
-       {showPopup && (
-          <WalletPopup
-          principal={principal}
-          setPrincipal={setPrincipal}
-            onClose={handleClosePopup}
-            handlePurchasePopup={handlePurchasePopup}
-          />
-        )}
-          {/* {showPurchasePopUp && (
-        //  <PurchasePopup onClose={closePurchasePopup} />
-        )} */}
-
-      <Routes>
-        <Route path="/" element={<Home handleConnectWallet={handleConnectWallet} />}>
-          <Route index element={<DSTCComponent />}></Route>
-          <Route path="/Share" element={<PublishStoryComponent principal={principal} setPrincipal={setPrincipal} />}></Route>
-          <Route path="/Dusts" element={<BlogCardsComponent />}></Route>
-          <Route path="/Whitepaper" element={<WhitePaper />}></Route>
-           <Route path="/Roadmap" element={<Roadmap />}></Route>
-              <Route path="/How it works" element={<HowItWorks />}></Route>
-          <Route path="/Dusts/:dustId" element={<ArticleComponent />}></Route>
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <main className="app-bg min-h-[100dvh] overflow-x-hidden max-w-full">
+      <section className="max-w-6xl xl:px-0 px-4 flex center col mx-auto pb-8 md:gap-36 gap-12">
+        <div id={APP_BODY_ID} className="fixed inset-0 light round-gradient" />
+        {Components.map(({ El, id }, i) => (
+          <Animate id={id} n={i + 1} key={id + i}>
+            <El />
+          </Animate>
+        ))}
+      </section>
+    </main>
   );
-};
+}
+
 export default App;

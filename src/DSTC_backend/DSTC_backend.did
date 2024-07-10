@@ -1,8 +1,9 @@
 type Dust = record { id : nat64; title : text; content : text };
-type Result = variant { Ok : Dust; Err : text };
-type Result_1 = variant { Ok : text; Err : text };
+type Result = variant { Ok : text; Err : text };
+type Result_1 = variant { Ok : Dust; Err : text };
 service : {
+  delete_all_dusts : () -> (Result);
   get_dusts : () -> (vec record { nat64; Dust }) query;
-  get_single_dust : (nat64) -> (Result) query;
-  publish_dust : (text, text) -> (Result_1);
+  get_single_dust : (nat64) -> (Result_1) query;
+  publish_dust : (text, text) -> (Result);
 }

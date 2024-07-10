@@ -1,145 +1,147 @@
-import * as React from "react";
-import {
-  AppBar,
-  Box,
-  Toolbar,
-  IconButton,
-  Typography,
-  Menu,
-  MenuItem,
-  Button,
-  Container,
-} from "@mui/material";
+import { Grid, Container } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link } from "react-router-dom";
+import CloseIcon from "@mui/icons-material/Close";
+import { Link, useLocation } from "react-router-dom";
+import styled from "styled-components";
 
-const pages = ["Dusts", "Share","Whitepaper", "Roadmap","How it works"];
+const states: any = {
+  "/": {
+    left: "6px",
+    width: "61px",
+  },
+  "/about": {
+    left: "81px",
+    width: "65px",
+  },
+  "/blog": {
+    left: "157px",
+    width: "55px",
+  },
+  "/bookmarks": {
+    left: "224px",
+    width: "100px",
+  },
+  "/projects": {
+    left: "340px",
+    width: "79px",
+  },
+};
 
+const StyledLink = styled(Link)`
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  border-bottom: none;
+  margin: 0;
+  padding: 0;
+  z-index: 1;
+  font-weight: 500;
+  transition: opacity 0.3s ease 0s;
 
-const ResponsiveAppBar: React.FC<{ handleConnectWallet: () => void }> = ({
-  handleConnectWallet,
-}) => {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
+  &:hover {
+    opacity: 0.5;
+  }
+`;
 
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
+const MenuContainer = styled(Container)`
+  cursor: pointer;
+`;
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
+export interface NavProps {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+}
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+const Links = (): JSX.Element => (
+  <>
+    <StyledLink to="/learn">Learn</StyledLink>
+    <StyledLink to="/about">Contribute</StyledLink>
+    <StyledLink to="/blog">Blog</StyledLink>
+  </>
+);
+
+const Nav = ({ isOpen, onOpen, onClose }: NavProps): JSX.Element => {
+  const location = useLocation();
+  let navStyle = states["/"];
+
+  if (location.pathname !== "/") {
+    for (const path of Object.keys(states).slice(1)) {
+      if (location.pathname.startsWith(path)) {
+        navStyle = states[path];
+        break;
+      }
+    }
+  }
 
   return (
-    <AppBar position="static" sx={{ background: "#1e1e1e" }}>
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            component={Link}
-            to="/"
-            sx={{
-              mr: 2,
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "#bb86fc",
-              textDecoration: "none",
-            }}
-          >
-            DSTC
-          </Typography>
-
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="menu"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu} component={Link} to={`/${page}`}>
-                  <Typography variant="body1" sx={{ color: "#bb86fc" }}>
-                    {page}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                component={Link}
-                to={`/${page}`}
-                sx={{ mx: 2, color: "#bb86fc" }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleConnectWallet}
-              sx={{ mr: 2 }}
-            >
-         Connect wallet
-            </Button>
-          
-            
-            <Menu
-              id="user-menu"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-             
-            </Menu>
-          </Box>
-        </Toolbar>
+    <Grid
+      component="nav"
+      px={["2rem", "2rem", "2rem", "0"]}
+      container
+      alignItems="center"
+      justifyContent={["center", "center", "space-between"]}
+      margin="3rem 0"
+    >
+      <Container sx={{ display: { xs: "none", md: "flex" } }}>
+        <StyledLink to="/">Antoine Ordonez</StyledLink>
       </Container>
-    </AppBar>
+      <MenuContainer sx={{ display: { xs: "flex", md: "none" } }}>
+        {isOpen ? (
+          <CloseIcon
+            sx={{ fontSize: "2rem", margin: "-0.3rem" }}
+            onClick={(evt) => evt.type === "click" && onClose()}
+          />
+        ) : (
+          <MenuIcon
+            sx={{ fontSize: "1.6rem" }}
+            onClick={(evt) => evt.type === "click" && onOpen()}
+          />
+        )}
+      </MenuContainer>
+      {isOpen && (
+        <Grid container direction="column" sx={{ fontSize: "2rem" }} py="3rem">
+          <Links />
+        </Grid>
+      )}
+      <Container
+        sx={{
+          alignItems: "center",
+          display: { xs: "none", md: "flex" },
+          justifyContent: "center",
+        }}
+      >
+        <Grid
+          container
+          spacing={2}
+          alignItems="center"
+          justifyContent="center"
+          sx={{
+            borderRadius: "25px",
+            background: "rgba(0, 0, 0, 0.04)",
+            padding: "15px",
+            position: "relative",
+          }}
+        >
+          <div
+            style={{
+              background: "white",
+              position: "absolute",
+              borderRadius: "25px",
+              height: "85%",
+              ...navStyle,
+            }}
+          />
+          <Links />
+        </Grid>
+      </Container>
+      <Container
+        sx={{ alignItems: "flex-end", display: { xs: "none", md: "flex" } }}
+      >
+        <StyledLink to="mailto:hello@shellbear.me">Contact</StyledLink>
+      </Container>
+    </Grid>
   );
 };
 
-export default ResponsiveAppBar;
+export default Nav;
