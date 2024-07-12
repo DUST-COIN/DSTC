@@ -1,7 +1,8 @@
 export const routes = {
   home: "",
-  about: "about",
-  collection: "collections",
+  about: "contribute",
+  contribute: "",
+  collection: "",
   faq: "faq",
   popular: "popular",
   features: "features",

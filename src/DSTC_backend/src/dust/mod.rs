@@ -7,6 +7,7 @@ pub struct Dust {
     pub title: String,
     pub content: String,
 
+
     pub id: u64,
 }
 impl Dust {}

@@ -1,6 +1,7 @@
 #[macro_use]
 extern crate serde;
 
+use candid::Principal;
 use ic_cdk::{query, update};
 use ic_stable_structures::{
     memory_manager::{MemoryId, MemoryManager, VirtualMemory},
@@ -56,7 +57,7 @@ async fn publish_dust(content: String, title: String) -> Result<String, String> 
         let _ = counter.borrow_mut().set(counter_value + 1);
         counter_value
     });
-    let dust = Dust { content, title, id };
+    let dust = Dust { content, title, id};
 
     match do_insert_dust(&dust, id) {
         Some(e) => Ok(String::from("Posted succesfully")),

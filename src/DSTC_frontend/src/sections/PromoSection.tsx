@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Button from "../components/Button";
 
 export default function PromoSection() {
@@ -10,11 +11,15 @@ export default function PromoSection() {
       />
       <div className="bg-gradient-to-bl from-sky-700 via-purple-700 to-blue-800 rounded-3xl p-3 md:p-0 w-full sm:h-[320px] h-full absolute bottom-0 z-[-1] shadow-lg"></div>
       <article className="col gap-6 items-start justify-center h-[inherit] md:max-w-[40%] m-2 lg:-translate-y-10">
-        <h4 className="font-redzone text-6xl">Start learning</h4>
+        <Link to="/contribute">
+          <h4 className="font-redzone text-6xl">Start teaching</h4>
+        </Link>
         <span className="text-gray-200">
           Your Journey to the internet computer begins with Dust
         </span>
-        <Button outline>Start learning</Button>
+        <Link to="/learn">
+          <Button outline>Start learning</Button>
+        </Link>
       </article>
     </section>
   );
