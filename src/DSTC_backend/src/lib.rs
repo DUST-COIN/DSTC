@@ -7,6 +7,9 @@ use ic_stable_structures::{
     memory_manager::{MemoryId, MemoryManager, VirtualMemory},
     BTreeMap, Cell, DefaultMemoryImpl, Vec as VecStructure,
 };
+use ic_ledger_types::{
+    AccountIdentifier, Memo, Subaccount, Tokens, TransferArgs, TransferError
+};
 
 use std::cell::RefCell;
 mod dust;
@@ -17,6 +20,10 @@ use user::User;
 type Memory = VirtualMemory<DefaultMemoryImpl>;
 
 type IdCell = Cell<u64, Memory>;
+pub static PRESALE_AMOUNT: Tokens = Tokens::from_e8s(1_000_000_000);
+pub static TRANSFER_FEE: Tokens = Tokens::from_e8s(1000);
+
+
 
 thread_local! {
 
@@ -94,6 +101,27 @@ async fn get_single_dust(id: u64) -> Result<Dust, String> {
 
 fn match_get_dust(id: &u64) -> Option<Dust> {
     DUSTSGROW.with(|service| service.borrow().get(id))
+}
+
+
+#[update]
+async fn transfer_dust(to:String)->Result<u64,TransferError>{
+      let transfer_args = TransferArgs {
+    
+        amount:PRESALE_AMOUNT,
+        fee: TRANSFER_FEE,
+        from_subaccount: None,
+        to: AccountIdentifier::new(
+           &Principal::from_text(&to).unwrap(),
+            &Subaccount::from(Principal::from_text(&to).unwrap(),),
+        ),
+        created_at_time: None,
+        memo:ic_ledger_types::Memo(42)
+    };
+  let res= ic_ledger_types::transfer(Principal::from_text("kl644-zyaaa-aaaap-qhk2q-cai").unwrap(), transfer_args).await.unwrap();
+  res
+    
+
 }
 
 #[derive(candid::CandidType, Deserialize, Serialize, Debug)]
